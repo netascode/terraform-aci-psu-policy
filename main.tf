@@ -1,9 +1,12 @@
-resource "aci_rest" "fvTenant" {
-  dn         = "uni/tn-${var.name}"
-  class_name = "fvTenant"
+locals {
+  admin_state = var.admin_state == "combined" ? "comb" : (var.admin_state == "nnred" ? "rdn" : (var.admin_state == "n1red" ? "ps-rdn" : ""))
+}
+
+resource "aci_rest" "psuInstPol" {
+  dn         = "uni/fabric/psuInstP-${var.name}"
+  class_name = "psuInstPol"
   content = {
     name      = var.name
-    nameAlias = var.alias
-    descr     = var.description
+    adminRdnM = local.admin_state
   }
 }

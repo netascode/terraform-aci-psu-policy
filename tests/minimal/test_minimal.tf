@@ -5,8 +5,8 @@ terraform {
     }
 
     aci = {
-      source  = "netascode/aci"
-      version = ">=0.2.0"
+      source  = "CiscoDevNet/aci"
+      version = ">=2.0.0"
     }
   }
 }
@@ -17,7 +17,7 @@ module "main" {
   name = "PSU1"
 }
 
-data "aci_rest" "psuInstPol" {
+data "aci_rest_managed" "psuInstPol" {
   dn = "uni/fabric/psuInstP-${module.main.name}"
 
   depends_on = [module.main]
@@ -28,7 +28,7 @@ resource "test_assertions" "psuInstPol" {
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.psuInstPol.content.name
+    got         = data.aci_rest_managed.psuInstPol.content.name
     want        = module.main.name
   }
 }
